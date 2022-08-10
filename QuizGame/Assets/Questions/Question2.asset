@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   question: What
   answers:
-  - Horser
+  - Horse
   - Laptop
   - Car
   - Truck
