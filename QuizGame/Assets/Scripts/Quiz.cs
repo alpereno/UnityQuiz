@@ -7,6 +7,8 @@ using UnityEngine.UI;
 public class Quiz : MonoBehaviour
 {
     public event System.Action OnAnswered;
+    public event System.Action OnCorrectAnswer;
+
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
@@ -19,16 +21,24 @@ public class Quiz : MonoBehaviour
     [SerializeField] Sprite defaultAnswerSprite;
     [SerializeField] Sprite correctAnswerSprite;
 
+    [Header("Progress Bar")]
+    [SerializeField] Slider progressBar;
+
+    [SerializeField] GameObject quizObject;
+    [SerializeField]GameObject EndScreenObject;
+
     //Timer timer;
     int answersLength;
     int correctAnswerIndex;
-    bool hasAnswered;
+    public bool isComplete;
 
     Timer timer;
 
     private void Start()
     {
         timer = FindObjectOfType<Timer>();
+        progressBar.maxValue = questions.Count;
+        progressBar.value = 0;
         if (timer != null)
         {
             timer.OnTimeIsUp += OnTimeIsUp;
@@ -61,7 +71,15 @@ public class Quiz : MonoBehaviour
             SetDefaultButtonSprites();
             GetRandomQuestion();
             DisplayQuestion();
+            progressBar.value++;
         }
+        else
+        {
+            print("Game over in next question end of question");
+            quizObject.SetActive(false);
+            EndScreenObject.SetActive(true);
+        }
+
         // else call an event game is over congrt. etc.
         // time stop
     }
@@ -111,12 +129,16 @@ public class Quiz : MonoBehaviour
     // connect this method to all of answers. Need to know wich button pressed so with index variable
     public void OnAnswerSelected(int index)
     {
-        hasAnswered = true;
         DisplayAnswer(index);
         SetButtonState(false);
         if (OnAnswered != null)
         {
             OnAnswered();
+        }
+        if (progressBar.value==progressBar.maxValue)
+        {
+            isComplete = true;
+            print("game over after answer selected progress bar = max value");
         }
     }
 
@@ -128,6 +150,10 @@ public class Quiz : MonoBehaviour
         if (index == correctAnswerIndex)
         {
             questionText.text = "Correct!";
+            if (OnCorrectAnswer != null)
+            {
+                OnCorrectAnswer();
+            }
         }
         else
         {

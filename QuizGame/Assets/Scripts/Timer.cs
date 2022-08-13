@@ -7,6 +7,7 @@ public class Timer : MonoBehaviour
 {
     public event System.Action OnTimeIsUp;
     public event System.Action OnNextQuestion;
+
     // the variable that showing player's answering phase
     public bool answeringQuestion;
     public float percent;
@@ -14,7 +15,7 @@ public class Timer : MonoBehaviour
 
     [SerializeField] Image timerImage;
     [SerializeField] float fullTime = 30;
-    [SerializeField] float timeToShowCorrectAnswer = 10;
+    [SerializeField] float timeToShowCorrectAnswer = 3.5f;
     
     float timerValue;
 
