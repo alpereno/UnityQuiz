@@ -11,7 +11,8 @@ public class Quiz : MonoBehaviour
 
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
-    [SerializeField] List<QuestionSO> questions = new List<QuestionSO>();
+    [SerializeField] TMP_Text categoryText;
+    [HideInInspector] public List<QuestionSO> questions = new List<QuestionSO>();
     QuestionSO currentQuestion;
 
     [Header("Answers")]
@@ -35,6 +36,19 @@ public class Quiz : MonoBehaviour
     Timer timer;
 
     private void Start()
+    {
+        //timer = FindObjectOfType<Timer>();
+        //progressBar.maxValue = questions.Count;
+        //progressBar.value = 0;
+        //if (timer != null)
+        //{
+        //    timer.OnTimeIsUp += OnTimeIsUp;
+        //    timer.OnNextQuestion += OnNextQuestion;
+        //}
+        //NextQuestion();
+    }
+
+    public void OnStart()
     {
         timer = FindObjectOfType<Timer>();
         progressBar.maxValue = questions.Count;
@@ -88,6 +102,8 @@ public class Quiz : MonoBehaviour
     {
         answersLength = answerButtons.Length;
         questionText.text = currentQuestion.GetQuestion();
+        categoryText.text = currentQuestion.GetQuestionCategory();
+
         for (int i = 0; i < answersLength; i++)
         {
             TextMeshProUGUI buttonText = answerButtons[i].GetComponentInChildren<TextMeshProUGUI>();

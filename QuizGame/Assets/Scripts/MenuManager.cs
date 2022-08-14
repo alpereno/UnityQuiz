@@ -8,10 +8,14 @@ public class MenuManager: MonoBehaviour
 {
     [SerializeField] TMP_Text finalScoreText;
     ScoreKeeper scoreKeeper;
+    QuestionAPIController questionAPIController;
+    [SerializeField] GameObject categoryScreen;
+    [SerializeField] GameObject quizScreen;
 
     private void Start()
     {
         scoreKeeper = FindObjectOfType<ScoreKeeper>();
+        questionAPIController = FindObjectOfType<QuestionAPIController>();
     }
 
     public void ShowFinalScore()
@@ -22,5 +26,12 @@ public class MenuManager: MonoBehaviour
     public void PlayAgain()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+    }
+
+    public void SetCategoryIndex(int index)
+    {
+        questionAPIController.SetQuizCategory(index);
+        categoryScreen.SetActive(false);
+        quizScreen.SetActive(true);
     }
 }
