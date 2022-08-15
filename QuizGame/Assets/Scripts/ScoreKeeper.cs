@@ -7,9 +7,9 @@ public class ScoreKeeper : MonoBehaviour
 {
     [SerializeField] TMP_Text scoreText;
     public int correctAnswers { get; private set; } = 0;
-    public int questionsSeen { get; private set; } = 0;
+    public int questionsSeen { get; private set; } = 1;
 
-    int score;
+    bool gameOver;
 
     private void Start()
     {
@@ -20,25 +20,20 @@ public class ScoreKeeper : MonoBehaviour
     void IncrementCorrectAnswers()
     {
         correctAnswers++;
-        score = CalculateScore(); ;
-        asd();
+        DisplayScore();
     }
 
     void IncrementQuestionSeen()
     {
-        questionsSeen++;
-        score = CalculateScore();
-        asd();
+        if (!gameOver)
+        {
+            questionsSeen++;
+            DisplayScore();
+        }
     }
 
-    public int CalculateScore()
+    public void DisplayScore()
     {
-        int score = Mathf.RoundToInt(correctAnswers / (float)questionsSeen * 100);
-        return score;
-    }
-
-    public void asd()
-    {
-        scoreText.text = "Score: " + score + "%";
+        scoreText.text = "Score: " + correctAnswers + "/" + questionsSeen;
     }
 }
