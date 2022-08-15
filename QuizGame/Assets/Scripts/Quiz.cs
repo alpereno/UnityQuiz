@@ -6,8 +6,9 @@ using UnityEngine.UI;
 
 public class Quiz : MonoBehaviour
 {
-    public event System.Action OnAnswered;
-    public event System.Action OnCorrectAnswer;
+    public event System.Action OnAnswered;          // sure degismeli
+    public event System.Action OnCorrectAnswer;     // dogru sayisi bir artmali
+    public event System.Action OnGameOver;
 
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
@@ -25,28 +26,9 @@ public class Quiz : MonoBehaviour
     [Header("Progress Bar")]
     [SerializeField] Slider progressBar;
 
-    [SerializeField] GameObject quizObject;
-    [SerializeField]GameObject EndScreenObject;
-
-    //Timer timer;
     int answersLength;
     int correctAnswerIndex;
-    public bool isComplete;
-
     Timer timer;
-
-    private void Start()
-    {
-        //timer = FindObjectOfType<Timer>();
-        //progressBar.maxValue = questions.Count;
-        //progressBar.value = 0;
-        //if (timer != null)
-        //{
-        //    timer.OnTimeIsUp += OnTimeIsUp;
-        //    timer.OnNextQuestion += OnNextQuestion;
-        //}
-        //NextQuestion();
-    }
 
     public void OnStart()
     {
@@ -57,25 +39,10 @@ public class Quiz : MonoBehaviour
         {
             timer.OnTimeIsUp += OnTimeIsUp;
             timer.OnNextQuestion += OnNextQuestion;
+            timer.OnStart();
         }
         NextQuestion();
     }
-
-    //private void Update()
-    //{
-    //    timerImage.fillAmount = timer.percent;
-    //    if (timer.nextQuestion)
-    //    {
-    //        hasAnswered = false;
-    //        GetNextQuestion();
-    //        timer.nextQuestion = true;
-    //    }
-    //    else if (!hasAnswered && !timer.answeringQuestion)
-    //    {
-    //        DisplayAnswer(-1);
-    //        //SetButtonState(false);
-    //    }
-    //}
 
     void NextQuestion()
     {
@@ -89,9 +56,10 @@ public class Quiz : MonoBehaviour
         }
         else
         {
-            print("Game over in next question end of question");
-            quizObject.SetActive(false);
-            EndScreenObject.SetActive(true);
+            if (OnGameOver != null)
+            {
+                OnGameOver();
+            }
         }
 
         // else call an event game is over congrt. etc.
@@ -151,11 +119,6 @@ public class Quiz : MonoBehaviour
         {
             OnAnswered();
         }
-        if (progressBar.value==progressBar.maxValue)
-        {
-            isComplete = true;
-            print("game over after answer selected progress bar = max value");
-        }
     }
 
     void DisplayAnswer(int index)
@@ -165,7 +128,7 @@ public class Quiz : MonoBehaviour
 
         if (index == correctAnswerIndex)
         {
-            questionText.text = "Correct!";
+            //questionText.text = "Correct!";
             if (OnCorrectAnswer != null)
             {
                 OnCorrectAnswer();
@@ -174,7 +137,7 @@ public class Quiz : MonoBehaviour
         else
         {
             string correctAnswer = currentQuestion.GetAnswer(correctAnswerIndex);
-            questionText.text = "Sorry, the correct answer was; \n" + correctAnswer;
+            //questionText.text = "Sorry, the correct answer was; \n" + correctAnswer;
         }
         correctAnswerButtonImage.sprite = correctAnswerSprite;
         SetButtonState(false);
@@ -182,13 +145,13 @@ public class Quiz : MonoBehaviour
 
     void OnTimeIsUp()
     {
-        print("Time is up for answering!!!");
+        //print("Time is up for answering!!!");
         DisplayAnswer(-1);
     }
 
     void OnNextQuestion()
     {
-        print("Answer Showing time is over!!!");
+        //print("Answer Showing time is over!!!");
         NextQuestion();
     }
 }
