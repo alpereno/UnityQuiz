@@ -10,18 +10,10 @@ public class QuestionAPIController : MonoBehaviour
     public List<QuestionSO> questions = new List<QuestionSO>();
     public Quiz quiz;
 
-    // category 27 = animals
-    // category 23 = history
     int categoryIndex = 23;
-
-    //private void Awake()
-    //{
-    //    StartCoroutine(GetDataAndArrange());
-    //}
 
     IEnumerator GetDataAndArrange()
     {
-        // https://opentdb.com/api.php?amount=10&category=27&type=multiple
         string multipleTypeString = "&type=multiple";
         string categoryString = "&category=";
 
@@ -36,8 +28,8 @@ public class QuestionAPIController : MonoBehaviour
 
         yield return questionInfoRequest.SendWebRequest();
 
+        // printing all json file
         print(questionInfoRequest.downloadHandler.text);
-        // sitenin hepsini yaziyor.
 
         JSONNode questionInfo = JSON.Parse(questionInfoRequest.downloadHandler.text);
         // first one is questions info(its mean without response code [0] is response code),
@@ -47,21 +39,15 @@ public class QuestionAPIController : MonoBehaviour
         //print(questionInfo[1][2]); //giving 3.questions
         //print(questionInfo[1][2][0]); // giving 3.quesion's category
         //print(questionInfo[1][2][1]); // giving 3.questions's type (multiple) 2 is = difficulty 
-        print(questionInfo[1][2][3]); // giving questions
-        print(questionInfo[1][2][4]);
-        print(questionInfo[1][2][5]);
-                                      //print(questionInfo[1][2][4]); // correct answers
-                                      //print(questionInfo[1][2][5]); // incorrect answers
-                                      //print(questionInfo[1][2][5][0]); // incorrect answer one
-                                      // after that it will be null
+        //print(questionInfo[1][2][3]); // giving 3questions questionText
 
-        print("----");
+        //print(questionInfo[1][2][4]); // correct answers
+        //print(questionInfo[1][2][5]); // incorrect answers
+        //print(questionInfo[1][2][5][0]); // incorrect answer one
+                                            // after that it will be null
         CreateScOArray(questionInfo);
 
         yield return null;
-
-        //string questionText = questionInfo["question"];
-        // set ui object..
     }
 
 
@@ -93,6 +79,7 @@ public class QuestionAPIController : MonoBehaviour
         quiz.OnStart();
     }
 
+    // public method which is interacting with buttons
     public void SetQuizCategory(int _categoryIndex)
     {
         // check restrictions (valid category index) then set the categoryIndex        

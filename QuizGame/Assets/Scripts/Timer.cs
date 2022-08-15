@@ -18,17 +18,24 @@ public class Timer : MonoBehaviour
     [SerializeField] float timeToShowCorrectAnswer = 3.5f;
     
     float timerValue;
+    bool gameOver;
+    bool gameStarted;
 
-    private void Start()
+    public void OnStart()
     {
         FindObjectOfType<Quiz>().OnAnswered += OnAnsweredQuestion;
+        FindObjectOfType<Quiz>().OnGameOver += OnGameOver;
+        gameStarted = true;
         answeringQuestion = true;
         timerValue = fullTime;
     }
 
     private void Update()
     {
-        Countdown();
+        if (gameStarted && !gameOver)
+        {
+            Countdown();
+        }
     }
 
     //public void CancelTimer()
@@ -87,5 +94,11 @@ public class Timer : MonoBehaviour
     {
         answeringQuestion = false;
         timerValue = timeToShowCorrectAnswer;
+    }
+
+    void OnGameOver()
+    {
+        gameOver = true;
+        timerValue = 1;
     }
 }
