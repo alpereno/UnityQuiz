@@ -10,6 +10,7 @@ public class QuestionAPIController : MonoBehaviour
     public List<QuestionSO> questions = new List<QuestionSO>();
     public Quiz quiz;
 
+    // given a value to try. The index will change according to the selected category, the value assigned here does not matter.
     int categoryIndex = 23;
 
     IEnumerator GetDataAndArrange()
@@ -28,10 +29,26 @@ public class QuestionAPIController : MonoBehaviour
 
         yield return questionInfoRequest.SendWebRequest();
 
-        // printing all json file
-        print(questionInfoRequest.downloadHandler.text);
+        if (questionInfoRequest.isNetworkError || questionInfoRequest.isHttpError)
+        {
+            print(questionInfoRequest.error);
+            yield break;
+        }
 
-        JSONNode questionInfo = JSON.Parse(questionInfoRequest.downloadHandler.text);
+        // printing all json file
+        //*print(questionInfoRequest.downloadHandler.text);
+
+        // Converting to utf8 for clarity of question texts.
+
+        //JSONNode questionInfo = JSON.Parse(questionInfoRequest.downloadHandler.text);
+        JSONNode questionInfo = JSON.Parse(System.Text.Encoding.UTF8.GetString(questionInfoRequest.downloadHandler.data));
+        print(JSON.Parse(System.Text.Encoding.UTF8.GetString(questionInfoRequest.downloadHandler.data)));
+        //string myString = questionInfoRequest.downloadHandler.data;
+        //byte[] bytes = questionInfoRequest.downloadHandler.data;
+        //string myString = System.Text.Encoding.UTF8.GetString(bytes);
+        //System.Text.Encoding.Convert(System.Text.Encoding.Default, System.Text.Encoding.UTF8, System.Text.Encoding.Default.GetBytes())
+
+
         // first one is questions info(its mean without response code [0] is response code),
         // second dimension is question number in this example 3rd question [0,1,2]
         // third dimension is questions info (its mean category, type, question text, correct and incorrect answers)
@@ -44,13 +61,16 @@ public class QuestionAPIController : MonoBehaviour
         //print(questionInfo[1][2][4]); // correct answers
         //print(questionInfo[1][2][5]); // incorrect answers
         //print(questionInfo[1][2][5][0]); // incorrect answer one
-                                            // after that it will be null
+
+        // after that it will be null
+
         CreateScOArray(questionInfo);
 
         yield return null;
     }
 
 
+    // creates Question Scriptable Object in run time and attach info required information to them
     void CreateScOArray(JSONNode questionInfo)
     {
         string questionCategory = "";
@@ -79,7 +99,7 @@ public class QuestionAPIController : MonoBehaviour
         quiz.OnStart();
     }
 
-    // public method which is interacting with buttons
+    // public method which is interacting with buttons. Assign the value of category index
     public void SetQuizCategory(int _categoryIndex)
     {
         // check restrictions (valid category index) then set the categoryIndex        

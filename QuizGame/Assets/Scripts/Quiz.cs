@@ -6,15 +6,16 @@ using UnityEngine.UI;
 
 public class Quiz : MonoBehaviour
 {
-    public event System.Action OnAnswered;          // sure degismeli
-    public event System.Action OnCorrectAnswer;     // dogru sayisi bir artmali
-    public event System.Action OnGameOver;
+                                                    // I useed event to reduce interclass dependency
+    public event System.Action OnAnswered;          // when time is up this event will be called also subscriptions method are to.
+    public event System.Action OnCorrectAnswer;     // the correct answer number should increase on scorekeeper
+    public event System.Action OnGameOver;          // when game is over bring the gameOver screen etc.
 
     [Header("Questions")]
     [SerializeField] TextMeshProUGUI questionText;
     [SerializeField] TMP_Text categoryText;
-    [HideInInspector] public List<QuestionSO> questions = new List<QuestionSO>();
-    QuestionSO currentQuestion;
+    [HideInInspector] public List<QuestionSO> questions = new List<QuestionSO>();   // list which is holding all given questions
+    QuestionSO currentQuestion;                                                     // to show screen chosen question
 
     [Header("Answers")]
     [SerializeField] GameObject[] answerButtons;
@@ -48,6 +49,7 @@ public class Quiz : MonoBehaviour
     {
         if (questions.Count > 0)
         {
+            answersLength = answerButtons.Length;
             SetButtonState(true);
             SetDefaultButtonSprites();
             GetRandomQuestion();
@@ -61,14 +63,10 @@ public class Quiz : MonoBehaviour
                 OnGameOver();
             }
         }
-
-        // else call an event game is over congrt. etc.
-        // time stop
     }
 
     void DisplayQuestion()
     {
-        answersLength = answerButtons.Length;
         questionText.text = currentQuestion.GetQuestion();
         categoryText.text = currentQuestion.GetQuestionCategory();
 
@@ -110,7 +108,7 @@ public class Quiz : MonoBehaviour
             changedButtonImage.sprite = defaultAnswerSprite;
     }
 
-    // connect this method to all of answers. Need to know wich button pressed so with index variable
+    // bind this method to all of answers. Need to know wich button pressed so with index variable
     public void OnAnswerSelected(int index)
     {
         DisplayAnswer(index);

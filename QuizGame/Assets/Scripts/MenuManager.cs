@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuManager: MonoBehaviour
 {
+    // This script controls transitions between scenes.
     [SerializeField] TMP_Text finalScoreText;
     ScoreKeeper scoreKeeper;
     QuestionAPIController questionAPIController;

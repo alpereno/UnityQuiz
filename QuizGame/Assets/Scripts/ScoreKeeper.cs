@@ -5,6 +5,7 @@ using TMPro;
 
 public class ScoreKeeper : MonoBehaviour
 {
+    // When the answer buttons are selected, the score is calculated with Events.
     [SerializeField] TMP_Text scoreText;
     public int correctAnswers { get; private set; } = 0;
     public int questionsSeen { get; private set; } = 1;

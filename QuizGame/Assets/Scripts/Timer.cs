@@ -4,9 +4,11 @@ using UnityEngine;
 using UnityEngine.UI;
 
 public class Timer : MonoBehaviour
-{
-    public event System.Action OnTimeIsUp;
-    public event System.Action OnNextQuestion;
+{                   
+    public event System.Action OnTimeIsUp;          // when time is up this event will be called also subscriptions method are to.
+                                                    // dipslaying correct answer.
+
+    public event System.Action OnNextQuestion;      // on next question event will be called to score and get next question
 
     // the variable that showing player's answering phase
     public bool answeringQuestion;
@@ -38,11 +40,6 @@ public class Timer : MonoBehaviour
         }
     }
 
-    //public void CancelTimer()
-    //{
-    //    timerValue = 0;
-    //}
-
     void Countdown()
     {
         timerValue -= Time.deltaTime;
@@ -56,8 +53,6 @@ public class Timer : MonoBehaviour
             }
             else
             {
-                // this line should run 1 time too
-                // call an event for time is up for answering question to show answering 
                 answeringQuestion = false;
                 timerValue = timeToShowCorrectAnswer;
 
@@ -78,16 +73,12 @@ public class Timer : MonoBehaviour
             {
                 answeringQuestion = true;
                 timerValue = fullTime;
-                //nextQuestion = true;
-                // this line should run 1 time
-                // call an event time is up for showing answer and call the next question
                 if (OnNextQuestion != null)
                 {
                     OnNextQuestion();
                 }
             }
         }
-        //print(answeringQuestion + " : " + timerValue + " = " + percent);
     }
 
     void OnAnsweredQuestion()
